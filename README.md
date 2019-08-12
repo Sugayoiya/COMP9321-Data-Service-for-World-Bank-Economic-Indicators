@@ -14,9 +14,11 @@ After importing the collection, the service should return a response containing 
 Example:
 
 ```HTTP operation: POST /<collections>```
+
 Input Payload:
 
 ```{ "indicator_id" : "NY.GDP.MKTP.CD" }```
+
 Returns: 201 Created
 
 ```{ 
@@ -24,7 +26,9 @@ Returns: 201 Created
     "collection_id" : "<collection_id>",  
     "creation_time": "2019-03-09T12:06:11Z",
     "indicator" : "<indicator>"
-}```
+}
+```
+
 
 * The return response contains the location of the data entry created as the result of the processing the import.
 * You should return appropriate responses in case of invalid indicators or any invalid attempts to use the endpoint ( e.g. If the input indicator id doesn't exist in the data source, return error 404 )
@@ -37,7 +41,8 @@ http://api.worldbank.org/v2/countries/all/indicators/NY.GDP.MKTP.CD?date=2013:20
 **Data entry conversion:**
 Here is an example of source data entry as it is in the source API :
 
-```{ 
+```
+{ 
    "indicator": { 
                   "id": "NY.GDP.MKTP.CD", 
                   "value": "GDP (current US$)" 
@@ -52,14 +57,17 @@ Here is an example of source data entry as it is in the source API :
     "unit": "", 
     "obs_status": "", 
     "decimal": 0 
-}```
+}
+```
 However, you do not need to store all of its attributes; instead convert it to a JSON format as below:
 
-```{ 
+```
+{ 
   "country": "Arab World",
   "date": "2016",
   "value": 2513935702899.65
-}```
+}
+```
 And as a result a collection should be formatted and stored in the database as follow:
 
 ```{  
@@ -73,20 +81,27 @@ And as a result a collection should be formatted and stored in the database as f
                 { "country": "Caribbean small states",  "date": "2017",  "value": 68823642409.779 },
                 ...
               ]
-}```
+}
+```
 **2- Deleting a collection with the data service**
 This operation deletes an existing collection from the database. The interface should look like as below:
 
-HTTP operation: DELETE /<collections>/{collection_id}
+```HTTP operation: DELETE /<collections>/{collection_id}```
+
 Returns: 200 OK 
+```
 { 
     "message" :"Collection = <collection_id> is removed from the database!"
 }
-3 - Retrieve the list of available collections
+```
+
+**3 - Retrieve the list of available collections**
 This operation retrieves all available collections. The interface should look like as like below:
 
-HTTP operation: GET /<collections>
+```HTTP operation: GET /<collections>```
+
 Returns: 200 OK 
+```
 [
     "location" : "/<collections>/<collection_id_1>", 
     "collection_id" : "collection_id_1",  
@@ -101,13 +116,17 @@ Returns: 200 OK
    },
    ...
 ]
-4 - Retrieve a collection
+```
+
+**4 - Retrieve a collection**
 This operation retrieves a collection by its ID . The response of this operation will show the imported content from world bank API for all 6 years. That is, the data model that you have designed is visible here inside a JSON entry's content part.
 
 The interface should look like as like below:
 
-HTTP operation: GET /<collections>/{collection_id}
+```HTTP operation: GET /<collections>/{collection_id}```
+
 Returns: 200 OK 
+```
 {  
   "collection_id" : "<collection_id>",
   "indicator": "NY.GDP.MKTP.CD",
@@ -119,12 +138,15 @@ Returns: 200 OK
                 ...
    ]
 }
-5 - Retrieve economic indicator value for given country and a year
+```
+
+**5 - Retrieve economic indicator value for given country and a year**
 The interface should look like as like below:
 
-HTTP operation: GET /<collections>/{collection_id}/{year}/{country}
-Returns: 200 OK
+``HTTP operation: GET /<collections>/{collection_id}/{year}/{country}``
 
+Returns: 200 OK
+```
 { 
    "collection_id": <collection_id>,
    "indicator" : "<indicator_id>",
@@ -132,12 +154,15 @@ Returns: 200 OK
    "year": "<year">,
    "value": <indicator_value_for_the_country>
 }
-6 - Retrieve top/bottom economic indicator values for a given year
+```
+
+*6 - Retrieve top/bottom economic indicator values for a given year*
 The interface should look like as like below:
 
-HTTP operation: GET /<collections>/{collection_id}/{year}?q=<query>
-Returns: 200 OK
+```HTTP operation: GET /<collections>/{collection_id}/{year}?q=<query>```
 
+Returns: 200 OK
+```
 { 
    "indicator": "NY.GDP.MKTP.CD",
    "indicator_value": "GDP (current US$)",
@@ -150,7 +175,8 @@ Returns: 200 OK
                   ...
                ]
 }
-The <query> is an optional parameter which can be either of following: 
-top<N> : Return top N countries sorted by indicator value
-bottom<N> : Return bottom N countries sorted by indicator value
-where N can be an integer value between 1 and 100. For example, a request like " GET /<collections>/< id>/2015?q=top10 " should returns top 10 countries according to the collection_id.
+```
+The \<query\> is an optional parameter which can be either of following: 
+* top\<N\> : Return top N countries sorted by indicator value
+* bottom\<N\> : Return bottom N countries sorted by indicator value
+where N can be an integer value between 1 and 100. For example, a request like " GET /\<collections\>/\< id\>/2015?q=top10 " should returns top 10 countries according to the collection_id.
