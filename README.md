@@ -33,14 +33,20 @@ Returns: 201 Created
 
 
 * The return response contains the location of the data entry created as the result of the processing the import.
+
 * You should return appropriate responses in case of invalid indicators or any invalid attempts to use the endpoint ( e.g. If the input indicator id doesn't exist in the data source, return error 404 )
+
 * If an input contains a n indicator that already has been imported before, you should still return the location of the data entry - but with status code 200 OK (instead of 20 1 Created).
+
 * A POINT TO PONDER ABOUT: An `asynchronous POST'?? If a POST takes too long, you may not want the client to wait. What you would do? You do not need to address this in the assignment.
+
 * The source API has pagination; in order to get all of data you need to send many request to import a single collection; however, you are required to get only first two pages instead of all: 
 http://api.worldbank.org/v2/countries/all/indicators/NY.GDP.MKTP.CD?date=2013:2018&format=json&page=2
+
 * The data entries inside the collection must be converted as described below:
 
 **Data entry conversion:**
+
 Here is an example of source data entry as it is in the source API :
 
 ```
@@ -87,6 +93,7 @@ And as a result a collection should be formatted and stored in the database as f
 }
 ```
 **2- Deleting a collection with the data service**
+
 This operation deletes an existing collection from the database. The interface should look like as below:
 
 ```HTTP operation: DELETE /<collections>/{collection_id}```
@@ -99,6 +106,7 @@ Returns: 200 OK
 ```
 
 **3 - Retrieve the list of available collections**
+
 This operation retrieves all available collections. The interface should look like as like below:
 
 ```HTTP operation: GET /<collections>```
@@ -122,6 +130,7 @@ Returns: 200 OK
 ```
 
 **4 - Retrieve a collection**
+
 This operation retrieves a collection by its ID . The response of this operation will show the imported content from world bank API for all 6 years. That is, the data model that you have designed is visible here inside a JSON entry's content part.
 
 The interface should look like as like below:
@@ -144,6 +153,7 @@ Returns: 200 OK
 ```
 
 **5 - Retrieve economic indicator value for given country and a year**
+
 The interface should look like as like below:
 
 ``HTTP operation: GET /<collections>/{collection_id}/{year}/{country}``
@@ -159,7 +169,8 @@ Returns: 200 OK
 }
 ```
 
-*6 - Retrieve top/bottom economic indicator values for a given year*
+**6 - Retrieve top/bottom economic indicator values for a given year**
+
 The interface should look like as like below:
 
 ```HTTP operation: GET /<collections>/{collection_id}/{year}?q=<query>```
@@ -180,6 +191,9 @@ Returns: 200 OK
 }
 ```
 The \<query\> is an optional parameter which can be either of following: 
+
 * top\<N\> : Return top N countries sorted by indicator value
+
 * bottom\<N\> : Return bottom N countries sorted by indicator value
+
 where N can be an integer value between 1 and 100. For example, a request like " GET /\<collections\>/\< id\>/2015?q=top10 " should returns top 10 countries according to the collection_id.
