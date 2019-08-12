@@ -1,6 +1,7 @@
 # Data-Service-for-World-Bank-Economic-Indicators
 
 **1- Import a collection from the data service**
+
 This operation can be considered as an on-demand 'import' operation. The service will download the JSON data for all countries respective to the year 2013 to 2018 and identified by the indicator id given by the user and process the content into an internal data format.
 
 Parameters should be given to the endpoint (in the payload) by the user:
